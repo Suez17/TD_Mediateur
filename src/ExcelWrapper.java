@@ -23,7 +23,7 @@ public class ExcelWrapper {
             String excelUrl = "jdbc:odbc={Microsoft Excel Driver(*.xls)};DBQ=E:/ID/DataSource/source1.xls;" +
                     "DriverID=22;READONLY=false";
             this.conn = DriverManager.getConnection(excelUrl);
-            System.out.println("Connection to excel file : OKK");
+            System.out.println("Connection to excel file : OK");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
