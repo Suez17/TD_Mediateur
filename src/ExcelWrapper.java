@@ -4,6 +4,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ExcelWrapper {
     private Connection conn;
@@ -15,15 +16,13 @@ public class ExcelWrapper {
     public void connexion() {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-
-        try {
-            String excelUrl = "jdbc:odbc={Microsoft Excel Driver(*.xls)};DBQ=E:/ID/DataSource/source1.xls;" +
-                    "DriverID=22;READONLY=false";
+            /*String excelUrl = "jdbc:odbc:Driver={Microsoft Excel Driver (*.xls)};DBQ=E:/ID/DataSource/source1.xls;" +
+                    "DriverID=22;READONLY=false";*/
+            String excelUrl = "jdbc:odbc:Connexion ODBC sous Excel";
             this.conn = DriverManager.getConnection(excelUrl);
             System.out.println("Connection to excel file : OK");
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
