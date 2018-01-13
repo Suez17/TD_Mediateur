@@ -2,13 +2,16 @@
  * Created by mikouyou on 21/11/2017.
  */
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class ExcelWrapper {
     private Connection conn;
     //On déclare la table de correspondance
     private HashMap<String, String> correspondenceTab;
-    String query, result;
+    String query;
+    Collection<String> result;
 
     public ExcelWrapper() {
         super();
@@ -21,7 +24,7 @@ public class ExcelWrapper {
                 "AND [" + 2007 + "$].Statut = 'etudiant'");
         correspondenceTab.put("Enseignant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'enseignant' " +
                 "AND [" + 2007 + "$].Statut = 'enseignant'");
-        correspondenceTab.put("WHERE", "AND");
+        //correspondenceTab.put("WHERE", "AND");
         //correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
     }
 
@@ -68,6 +71,7 @@ public class ExcelWrapper {
         this.connection();
         initCorrespondenceTab();
         query = convertQueryFromTemplate(query);
+        result = new ArrayList<String>();
         //System.out.println(query);
         try {
             Statement statement = conn.createStatement();
@@ -78,7 +82,7 @@ public class ExcelWrapper {
                 for (int i = 1; i <= 11; i++) {
                     getResult += resultQuery.getString(i) + " ";
                 }
-                result = getResult;
+                result.add(getResult + "\n");
             }
             resultQuery.close();
         } catch (SQLException e) {
@@ -87,7 +91,7 @@ public class ExcelWrapper {
         disonnection();
     }
 
-    public String getQueryResult() {
+    public Collection<String> getQueryResult() {
         excuteQueryInExcel(query);
         return this.result;
     }

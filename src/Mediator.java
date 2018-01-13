@@ -1,10 +1,12 @@
+import java.util.Collection;
+
 /**
  * Created by mikouyou on 21/11/2017.
  */
 public class Mediator {
     ExcelWrapper excWrap;
 
-    public String getResult(String query) {
+    public Collection<String> getResult(String query) {
         initWrappers();
         sentQueryToWrappers(query);
         return getResultFromWrappers();
@@ -14,7 +16,7 @@ public class Mediator {
         excWrap.getQueryFromMediator(query);
     }
 
-    public String getResultFromWrappers() {
+    public Collection<String> getResultFromWrappers() {
         return excWrap.getQueryResult();
     }
 
