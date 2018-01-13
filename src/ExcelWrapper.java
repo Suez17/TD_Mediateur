@@ -8,6 +8,7 @@ public class ExcelWrapper {
     private Connection conn;
     //On déclare la table de correspondance
     private HashMap<String, String> correspondenceTab;
+    String query, result;
 
     public ExcelWrapper() {
         super();
@@ -47,8 +48,8 @@ public class ExcelWrapper {
         }
     }
 
-    public String getQueryFromMediator(String query) {
-        return query;
+    public void getQueryFromMediator(String query) {
+        this.query = query;
     }
 
     public String convertQueryFromTemplate(String query) {
@@ -67,7 +68,7 @@ public class ExcelWrapper {
         this.connection();
         initCorrespondenceTab();
         query = convertQueryFromTemplate(query);
-        System.out.println(query);
+        //System.out.println(query);
         try {
             Statement statement = conn.createStatement();
             ResultSet resultQuery = statement.executeQuery(query);
@@ -77,7 +78,7 @@ public class ExcelWrapper {
                 for (int i = 1; i <= 11; i++) {
                     getResult += resultQuery.getString(i) + " ";
                 }
-                getQueryResult(getResult);
+                result = getResult;
             }
             resultQuery.close();
         } catch (SQLException e) {
@@ -86,11 +87,12 @@ public class ExcelWrapper {
         disonnection();
     }
 
-    public String getQueryResult(String result) {
-        return result;
+    public String getQueryResult() {
+        excuteQueryInExcel(query);
+        return this.result;
     }
 
-    public void sendResultToMediator(String result) {
+    /*public void sendResultToMediator(String result) {
 
-    }
+    }*/
 }
