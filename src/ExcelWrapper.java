@@ -1,23 +1,30 @@
 /**
  * Created by mikouyou on 21/11/2017.
  */
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.HashMap;
 
 public class ExcelWrapper {
     private Connection conn;
+    //On déclare la table de correspondance
+    private HashMap<String, String> correspondenceTab;
+    String queryConverted = null;
 
     public ExcelWrapper() {
         super();
     }
 
-    public void connexion() {
+    public void initCorrespondenceTab() {
+        correspondenceTab = new HashMap<String, String>();
+        correspondenceTab.put("ID_Etudiant", "ID");
+        correspondenceTab.put("Etudiant", "2006, 2007 WHERE Statut = 'Etudiant' AND"); //Problème AND WHERE
+        correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
+    }
+
+    public void connection() {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            /*String excelUrl = "jdbc:odbc:Driver={Microsoft Excel Driver (*.xls)};DBQ=E:/ID/DataSource/source1.xls;" +
-                    "DriverID=22;READONLY=false";*/
+            //On met la source de données ODBC créée en 32 bits (le jdk 7 doit être 32 bits aussi)
             String excelUrl = "jdbc:odbc:Connexion ODBC sous Excel";
             this.conn = DriverManager.getConnection(excelUrl);
             System.out.println("Connection to excel file : OK");
@@ -28,12 +35,47 @@ public class ExcelWrapper {
         }
     }
 
-    public void deconnexion() {
+    public void disonnection() {
         try {
             this.conn.close();
             System.out.println("Disonnection to excel file : OK");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public String getQueryFromMediator(String query) {
+        return query;
+    }
+
+    public void convertQueryFromTemplate(String query) {
+        String[] splitQuery = query.split(" ");
+        for (int i = 0; i < splitQuery.length; i++) {
+            if (correspondenceTab.get(splitQuery[i]) != null) {
+                splitQuery[i] = correspondenceTab.get(splitQuery[i]);
+            }
+            queryConverted += splitQuery[i] + " ";
+        }
+    }
+
+    public void excuteQueryInExcel(String query) {
+        this.connection();
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet resultQuery = statement.executeQuery(queryConverted);
+            while (resultQuery.next()) {
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getQueryResult(String result) {
+
+    }
+
+    public void sendResultToMediator(String result) {
+
     }
 }
