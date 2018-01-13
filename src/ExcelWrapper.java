@@ -19,7 +19,7 @@ public class ExcelWrapper {
         correspondenceTab.put("ID_Etudiant", "ID");
         correspondenceTab.put("Etudiant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'etudiant' " +
                 "AND [" + 2007 + "$].Statut = 'etudiant'");
-        correspondenceTab.put("Etudiant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'enseignant' " +
+        correspondenceTab.put("Enseignant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'enseignant' " +
                 "AND [" + 2007 + "$].Statut = 'enseignant'");
         correspondenceTab.put("WHERE", "AND");
         //correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
