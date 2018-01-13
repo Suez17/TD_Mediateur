@@ -8,7 +8,7 @@ public class ExcelWrapper {
     private Connection conn;
     //On déclare la table de correspondance
     private HashMap<String, String> correspondenceTab;
-    String queryConverted = null;
+    String queryConverted = "";
 
     public ExcelWrapper() {
         super();
@@ -17,7 +17,7 @@ public class ExcelWrapper {
     public void initCorrespondenceTab() {
         correspondenceTab = new HashMap<String, String>();
         correspondenceTab.put("ID_Etudiant", "ID");
-        correspondenceTab.put("Etudiant", "2006, 2007 WHERE Statut = 'Etudiant'");
+        correspondenceTab.put("Etudiant", "[" + 2006 + "$] WHERE Statut = 'Etudiant'");
         correspondenceTab.put("Enseignant", "2006, 2007 WHERE Statut = 'Enseignant'");
         correspondenceTab.put("WHERE", "AND");
         //correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
