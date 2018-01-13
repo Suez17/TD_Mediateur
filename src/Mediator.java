@@ -4,7 +4,7 @@
 public class Mediator {
 
     public void sentQueryToWrappers(String query) {
-        ExcelWrapper excWrap= new ExcelWrapper();
+        ExcelWrapper excWrap = new ExcelWrapper();
         excWrap.excuteQueryInExcel(query);
     }
 }

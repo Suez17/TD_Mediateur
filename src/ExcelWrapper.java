@@ -8,7 +8,6 @@ public class ExcelWrapper {
     private Connection conn;
     //On déclare la table de correspondance
     private HashMap<String, String> correspondenceTab;
-    String queryConverted = "";
 
     public ExcelWrapper() {
         super();
@@ -17,8 +16,10 @@ public class ExcelWrapper {
     public void initCorrespondenceTab() {
         correspondenceTab = new HashMap<String, String>();
         correspondenceTab.put("ID_Etudiant", "ID");
-        correspondenceTab.put("Etudiant", "[" + 2006 + "$] WHERE Statut = 'Etudiant'");
-        correspondenceTab.put("Enseignant", "2006, 2007 WHERE Statut = 'Enseignant'");
+        correspondenceTab.put("Etudiant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'etudiant' " +
+                "AND [" + 2007 + "$].Statut = 'etudiant'");
+        correspondenceTab.put("Etudiant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'enseignant' " +
+                "AND [" + 2007 + "$].Statut = 'enseignant'");
         correspondenceTab.put("WHERE", "AND");
         //correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
     }
@@ -50,29 +51,33 @@ public class ExcelWrapper {
         return query;
     }
 
-    public void convertQueryFromTemplate(String query) {
+    public String convertQueryFromTemplate(String query) {
         String[] splitQuery = query.split(" ");
+        String queryConverted = "";
         for (int i = 0; i < splitQuery.length; i++) {
             if (correspondenceTab.get(splitQuery[i]) != null) {
                 splitQuery[i] = correspondenceTab.get(splitQuery[i]);
             }
             queryConverted += splitQuery[i] + " ";
         }
+        return queryConverted;
     }
 
     public void excuteQueryInExcel(String query) {
         this.connection();
         initCorrespondenceTab();
-        convertQueryFromTemplate(query);
-        System.out.println(queryConverted);
+        query = convertQueryFromTemplate(query);
+        System.out.println(query);
         try {
             Statement statement = conn.createStatement();
-            ResultSet resultQuery = statement.executeQuery(queryConverted);
+            ResultSet resultQuery = statement.executeQuery(query);
+            String getResult;
             while (resultQuery.next()) {
+                getResult = "";
                 for (int i = 1; i <= 11; i++) {
-                    System.out.println(resultQuery.getString(i));
+                    getResult += resultQuery.getString(i) + " ";
                 }
-                System.out.println("\n\n");
+                getQueryResult(getResult);
             }
             resultQuery.close();
         } catch (SQLException e) {
@@ -81,8 +86,8 @@ public class ExcelWrapper {
         disonnection();
     }
 
-    public void getQueryResult(String result) {
-
+    public String getQueryResult(String result) {
+        return result;
     }
 
     public void sendResultToMediator(String result) {
