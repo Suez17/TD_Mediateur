@@ -3,11 +3,8 @@
  */
 public class Mediator {
 
-    public Mediator() {
-
-    }
-
     public void sentQueryToWrappers(String query) {
-
+        ExcelWrapper excWrap= new ExcelWrapper();
+        excWrap.excuteQueryInExcel(query);
     }
 }

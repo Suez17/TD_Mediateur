@@ -17,8 +17,10 @@ public class ExcelWrapper {
     public void initCorrespondenceTab() {
         correspondenceTab = new HashMap<String, String>();
         correspondenceTab.put("ID_Etudiant", "ID");
-        correspondenceTab.put("Etudiant", "2006, 2007 WHERE Statut = 'Etudiant' AND"); //Problème AND WHERE
-        correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
+        correspondenceTab.put("Etudiant", "2006, 2007 WHERE Statut = 'Etudiant'");
+        correspondenceTab.put("Enseignant", "2006, 2007 WHERE Statut = 'Enseignant'");
+        correspondenceTab.put("WHERE", "AND");
+        //correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
     }
 
     public void connection() {
@@ -60,15 +62,23 @@ public class ExcelWrapper {
 
     public void excuteQueryInExcel(String query) {
         this.connection();
+        initCorrespondenceTab();
+        convertQueryFromTemplate(query);
+        System.out.println(queryConverted);
         try {
             Statement statement = conn.createStatement();
             ResultSet resultQuery = statement.executeQuery(queryConverted);
             while (resultQuery.next()) {
-
+                for (int i = 1; i <= 11; i++) {
+                    System.out.println(resultQuery.getString(i));
+                }
+                System.out.println("\n\n");
             }
+            resultQuery.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        disonnection();
     }
 
     public void getQueryResult(String result) {
