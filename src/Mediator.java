@@ -4,7 +4,7 @@ import java.util.Collection;
  * Created by mikouyou on 21/11/2017.
  */
 public class Mediator {
-    ExcelWrapper excWrap;
+    public static ExcelWrapper excWrap;
 
     public Collection<String> getResult(String query) {
         initWrappers();

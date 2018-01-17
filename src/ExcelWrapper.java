@@ -7,27 +7,50 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class ExcelWrapper {
-    private Connection conn;
-    //On déclare la table de correspondance
-    private HashMap<String, String> correspondenceTab;
-    String query;
-    Collection<String> result;
+    public static Connection conn;
+    public static HashMap<String, String> correspondenceTab;
+    public static String query;
+    public static Collection<String> result;
 
     public ExcelWrapper() {
         super();
     }
 
-    public void initCorrespondenceTab() {
+    //Tableau de correspondance
+    public void initCorrespondenceTab(String excelSheet) {
         correspondenceTab = new HashMap<String, String>();
-        correspondenceTab.put("ID_Etudiant", "ID");
-        correspondenceTab.put("Etudiant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'etudiant' " +
-                "AND [" + 2007 + "$].Statut = 'etudiant'");
-        correspondenceTab.put("Enseignant", "[" + 2006 + "$], [" + 2007 + "$] WHERE [" + 2006 + "$].Statut = 'enseignant' " +
-                "AND [" + 2007 + "$].Statut = 'enseignant'");
-        //correspondenceTab.put("WHERE", "AND");
-        //correspondenceTab.put("SELECT count(*) FROM Etudiant WHERE Provenance <> 'France'", "SELECT count(*) FROM 2006, 2007 WHERE Statut = 'Etudiant' AND Provenance <> 'France'");
+        //Table Etudiant
+        correspondenceTab.put("Etudiant", "(SELECT [" + excelSheet + "$].ID, [" + excelSheet + "$].Nom, [" + excelSheet + "$].Prenom, [" + excelSheet + "$].Provenance, " +
+                "[" + excelSheet + "$].FormationPrecedente, [" + excelSheet + "$].NiveauInsertion " +
+                "FROM [" + excelSheet + "$] WHERE [" + excelSheet + "$].Statut = 'etudiant')");
+        //Table Enseignant
+        correspondenceTab.put("Enseignant", "(SELECT [" + excelSheet + "$].ID, [" + excelSheet + "$].Nom, [" + excelSheet + "$].Prenom " +
+                "FROM [" + excelSheet + "$] WHERE [" + excelSheet + "$].Statut = 'enseignant')");
+        //Table Cours
+        correspondenceTab.put("Cours", "(SELECT [" + excelSheet + "$].ID_Cours, [" + excelSheet + "$].Libelle_Cours, [" + excelSheet + "$].Type_Cours, [" + excelSheet + "$].Niveau_Cours " +
+                "FROM [" + excelSheet + "$])");
+        //Table Inscription
+        correspondenceTab.put("Inscription", "(SELECT [" + excelSheet + "$].ID, [" + excelSheet + "$].ID_Cours, [" + excelSheet + "$].Note " +
+                "FROM [" + excelSheet + "$])");
+        //Table Enseigne
+        correspondenceTab.put("Enseigne", "(SELECT [" + excelSheet + "$].ID, [" + excelSheet + "$].ID_Cours " +
+                "FROM [" + excelSheet + "$])");
+        //Tous les champs
+        correspondenceTab.put("ID_Etudiant", "[" + excelSheet + "$].ID");
+        correspondenceTab.put("ID_Enseignant", "[" + excelSheet + "$].ID");
+        correspondenceTab.put("Nom", "[" + excelSheet + "$].Nom");
+        correspondenceTab.put("Prenom", "[" + excelSheet + "$].Prenom");
+        correspondenceTab.put("Provenance", "[" + excelSheet + "$].Provenance");
+        correspondenceTab.put("FormationPrecedente", "[" + excelSheet + "$].FormationPrecedente");
+        correspondenceTab.put("NiveauInsertion", "[" + excelSheet + "$].NiveauInsertion");
+        correspondenceTab.put("ID_Cours", "[" + excelSheet + "$].ID_Cours");
+        correspondenceTab.put("Libelle", "[" + excelSheet + "$].Libelle_Cours");
+        correspondenceTab.put("Type", "[" + excelSheet + "$].Type_Cours");
+        correspondenceTab.put("Niveau", "[" + excelSheet + "$].Niveau_Cours");
+        correspondenceTab.put("Note", "[" + excelSheet + "$].Note");
     }
 
+    //Connexion à Excel
     public void connection() {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
@@ -42,6 +65,7 @@ public class ExcelWrapper {
         }
     }
 
+    //Déconnexion d'Excel
     public void disonnection() {
         try {
             this.conn.close();
@@ -51,10 +75,12 @@ public class ExcelWrapper {
         }
     }
 
+    //Récupérer la requête envoyée par le médiateur
     public void getQueryFromMediator(String query) {
         this.query = query;
     }
 
+    //Convertir la requête du médiateur pour la rendre compatible avec la source
     public String convertQueryFromTemplate(String query) {
         String[] splitQuery = query.split(" ");
         String queryConverted = "";
@@ -67,19 +93,31 @@ public class ExcelWrapper {
         return queryConverted;
     }
 
+    //Exécuter la requête convertie dans Excel
     public void excuteQueryInExcel(String query) {
         this.connection();
-        initCorrespondenceTab();
-        query = convertQueryFromTemplate(query);
+
+        //Pour chaque feuille dans Excel on converti la requête principale avec le bon tableau de correspondance et on fait une union des requêtes (ex : 3 feuilles -> union de 3 requêtes)
+        String finalQuery = "";
+        String[] excelSheets = {"2006", "2007"};
+        for (int i = 0; i < excelSheets.length; i++) {
+            initCorrespondenceTab(excelSheets[i]);
+            finalQuery += convertQueryFromTemplate(query);
+            if (i != excelSheets.length - 1) {
+                finalQuery += "UNION ";
+            }
+        }
+
         result = new ArrayList<String>();
-        //System.out.println(query);
+        System.out.println(finalQuery);
         try {
             Statement statement = conn.createStatement();
-            ResultSet resultQuery = statement.executeQuery(query);
+            ResultSet resultQuery = statement.executeQuery(finalQuery);
             String getResult;
             while (resultQuery.next()) {
                 getResult = "";
-                for (int i = 1; i <= 11; i++) {
+                //resultQuery.getMetaData().getColumnCount() permet de récupèrer le nombre de colonnes retournées par ResultSet
+                for (int i = 1; i <= resultQuery.getMetaData().getColumnCount(); i++) {
                     getResult += resultQuery.getString(i) + " ";
                 }
                 result.add(getResult + "\n");
@@ -91,12 +129,9 @@ public class ExcelWrapper {
         disonnection();
     }
 
+    //Récupérer le résultat de la requête et l'envoyer au médiateur
     public Collection<String> getQueryResult() {
         excuteQueryInExcel(query);
         return this.result;
     }
-
-    /*public void sendResultToMediator(String result) {
-
-    }*/
 }
