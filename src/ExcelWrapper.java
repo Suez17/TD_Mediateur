@@ -118,7 +118,7 @@ public class ExcelWrapper {
                 getResult = "";
                 //resultQuery.getMetaData().getColumnCount() permet de récupèrer le nombre de colonnes retournées par ResultSet
                 for (int i = 1; i <= resultQuery.getMetaData().getColumnCount(); i++) {
-                    getResult += resultQuery.getString(i) + " ";
+                    getResult += " : " + resultQuery.getString(i) + " // ";
                 }
                 result.add(getResult + "\n");
             }
