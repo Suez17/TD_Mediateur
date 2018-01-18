@@ -83,12 +83,21 @@ public class ExcelWrapper {
     //Convertir la requête du médiateur pour la rendre compatible avec la source
     public String convertQueryFromTemplate(String query) {
         String[] splitQuery = query.split(" ");
-        String queryConverted = "";
+        String queryConverted = "", currentQueryElement, charAtEndOfElement;
+        boolean isElementContainsComma;
         for (int i = 0; i < splitQuery.length; i++) {
-            if (correspondenceTab.get(splitQuery[i]) != null) {
-                splitQuery[i] = correspondenceTab.get(splitQuery[i]);
+            currentQueryElement = splitQuery[i];
+            charAtEndOfElement = " ";
+            isElementContainsComma = currentQueryElement.substring(currentQueryElement.length() - 1).equals(",");
+            if (isElementContainsComma) {
+                String[] splitQueryElementComma = currentQueryElement.split(",");
+                currentQueryElement = splitQueryElementComma[0];
+                charAtEndOfElement = ", "; //On remet la virgule qu'on avait retiré
             }
-            queryConverted += splitQuery[i] + " ";
+            if (correspondenceTab.get(currentQueryElement) != null) {
+                currentQueryElement = correspondenceTab.get(currentQueryElement);
+            }
+            queryConverted += currentQueryElement + charAtEndOfElement;
         }
         return queryConverted;
     }
