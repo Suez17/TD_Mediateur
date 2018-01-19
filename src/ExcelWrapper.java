@@ -108,7 +108,7 @@ public class ExcelWrapper {
             if (correspondenceTab.get(currentQueryElement) != null) { //On compare l'élément par rapport au tableau de correspondance
                 currentQueryElement = correspondenceTab.get(currentQueryElement);
             }
-            if (functionName!= null) { //On remet la fonction comme avant
+            if (functionName != null) { //On remet la fonction comme avant
                 currentQueryElement = functionName + "(" + currentQueryElement + ")";
             }
             queryConverted += currentQueryElement + charAtEndOfElement;

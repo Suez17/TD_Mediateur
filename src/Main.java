@@ -6,6 +6,6 @@ public class Main {
         Mediator M = new Mediator();
         //System.out.println("Result of the query : " + "\n" + M.getResult("SELECT Count(*) FROM Etudiant GROUP BY ID"));
         //System.out.println("Number of students : " + "\n" + M.getResult("SELECT Count(*) FROM Etudiant WHERE Provenance <> 'France' GROUP BY ID"));
-        System.out.println("Result of the query : " + "\n" + M.getResult("SELECT Count(Type) FROM Cours"));
+        System.out.println("Result of the query : " + "\n" + M.getResult("SELECT Count(Type), Type FROM Cours GROUP BY Type"));
     }
 }
