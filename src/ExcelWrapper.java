@@ -84,18 +84,32 @@ public class ExcelWrapper {
     public String convertQueryFromTemplate(String query) {
         String[] splitQuery = query.split(" ");
         String queryConverted = "", currentQueryElement, charAtEndOfElement;
-        boolean isElementContainsComma;
+        boolean isElementContainsComma, isElementIsFunction;
         for (int i = 0; i < splitQuery.length; i++) {
             currentQueryElement = splitQuery[i];
             charAtEndOfElement = " ";
+
+            //Si l'élément de la requête contient une virugule, on le retire et on le rajoute à la fin
             isElementContainsComma = currentQueryElement.substring(currentQueryElement.length() - 1).equals(",");
             if (isElementContainsComma) {
                 String[] splitQueryElementComma = currentQueryElement.split(",");
                 currentQueryElement = splitQueryElementComma[0];
                 charAtEndOfElement = ", "; //On remet la virgule qu'on avait retiré
             }
-            if (correspondenceTab.get(currentQueryElement) != null) {
+
+            //Si l'élément de la requête est une fonction, on extrait le champ entre parenthèses pour le comparer au tableau de correspondance et on remet comme avant à la fin
+            String functionName = null;
+            isElementIsFunction = currentQueryElement.contains("(");
+            if (isElementIsFunction) {
+                functionName = currentQueryElement.substring(0, currentQueryElement.indexOf("("));
+                currentQueryElement = currentQueryElement.substring(currentQueryElement.indexOf("(") + 1, currentQueryElement.indexOf(")"));
+            }
+
+            if (correspondenceTab.get(currentQueryElement) != null) { //On compare l'élément par rapport au tableau de correspondance
                 currentQueryElement = correspondenceTab.get(currentQueryElement);
+            }
+            if (functionName!= null) { //On remet la fonction comme avant
+                currentQueryElement = functionName + "(" + currentQueryElement + ")";
             }
             queryConverted += currentQueryElement + charAtEndOfElement;
         }
