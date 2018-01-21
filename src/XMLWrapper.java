@@ -36,6 +36,8 @@ public class XMLWrapper {
             E_1 = (Element) L.item(0);
             System.out.println("num etudiant "+E_1.getTextContent());
         }
+        
+        System.out.println("test commit");
     }
 }
 
