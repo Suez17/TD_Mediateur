@@ -1,0 +1,97 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="BaseDeDonnees">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:byte" name="ID"/>
+        <xs:element type="xs:string" name="Type"/>
+        <xs:element type="xs:byte" name="Taille"/>
+        <xs:element name="Enseignants">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Enseignant" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:byte" name="NumEns"/>
+                    <xs:element type="xs:string" name="Nom"/>
+                    <xs:element type="xs:string" name="Prenom"/>
+                    <xs:element type="xs:int" name="Telephone"/>
+                    <xs:element type="xs:string" name="adresseMail"/>
+                    <xs:element name="Enseignements">
+                      <xs:complexType mixed="true">
+                        <xs:sequence>
+                          <xs:element name="Enseigne" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="Nb_heures"/>
+                                <xs:element type="xs:short" name="Annee_universitaire"/>
+                                <xs:element type="xs:byte" name="ID_Cours"/>
+                                <xs:element type="xs:byte" name="NumEns"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Etudiants">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Etudiant" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:byte" name="NumEt"/>
+                    <xs:element type="xs:string" name="nom"/>
+                    <xs:element type="xs:string" name="telephone"/>
+                    <xs:element type="xs:string" name="Provenance"/>
+                    <xs:element type="xs:string" name="FormationPrecedante"/>
+                    <xs:element type="xs:short" name="AnneeDebut"/>
+                    <xs:element type="xs:string" name="dateNaissance"/>
+                    <xs:element type="xs:string" name="Niveau_insertion"/>
+                    <xs:element type="xs:string" name="Pays_formation_precedante"/>
+                    <xs:element name="Inscriptions">
+                      <xs:complexType mixed="true">
+                        <xs:sequence>
+                          <xs:element name="Inscription" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:short" name="Annee_universitaire"/>
+                                <xs:element type="xs:byte" name="NumEt"/>
+                                <xs:element type="xs:byte" name="ID_cours"/>
+                                <xs:element type="xs:byte" name="Note_cours"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Cours">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Cours" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:byte" name="ID_cours"/>
+                    <xs:element type="xs:string" name="Type"/>
+                    <xs:element type="xs:byte" name="Nb_heures"/>
+                    <xs:element type="xs:string" name="Niveau"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

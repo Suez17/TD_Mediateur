@@ -1,3 +1,4 @@
+package wrapper;
 /**
  * Created by mikouyou on 21/11/2017.
  */
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-public class OracleWrapper {
+public class OracleWrapper extends Wrapper{
     private Connection conn;
 
     public OracleWrapper() {
@@ -39,4 +40,10 @@ public class OracleWrapper {
             System.err.println("Erreur de deconnexion � la base de donn�es.");
         }
     }
+
+	@Override
+	public void readAll() {
+		// TODO Auto-generated method stub
+		
+	}
 }
