@@ -26,17 +26,17 @@ public class Mediator {
         sendQueryToWrappers(query);
         Collection<String> resultat = new ArrayList<>();
         resultat.addAll(excWrap.getQueryResult());
-        //resultat.addAll(oracleWrap.getQueryResult());
+        //resultat.addAll(oracleWrap.getQueryResult()); TODO FLORIAN PITEL
         resultat.addAll(xmlWrap.getQueryResult());
 
+        //Si "count" on fait l'addition de tous les nombres récupés à partir des wrappers
         if (query.contains("COUNT")) {
             int count = 0;
             for (String number : resultat) {
                 count += Integer.parseInt(number);
             }
-            Collection<String> countResultat = new ArrayList<>();
-            countResultat.add("COUNT = " + count);
-            return countResultat;
+            resultat.clear();
+            resultat.add("COUNT = " + count);
         }
         return resultat;
 	}
