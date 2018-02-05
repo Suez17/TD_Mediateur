@@ -14,14 +14,10 @@ public class Mediator {
     private static Wrapper wrapper;
     
     
-    
-    
-    
-    
 
     public Mediator(WrapperType type) {
     	if( type == WrapperType.EXCEL ){
-    		this.wrapper = new ExcelWrapper();
+    		excWrap = new ExcelWrapper();
     	}
     	else if( type == WrapperType.XML ){
     		this.wrapper = new XMLWrapper();
@@ -34,18 +30,26 @@ public class Mediator {
     
     
     
-    
 	public Collection<String> getResult(String query) {
 //        initWrappers();
-        sentQueryToWrappers(query);
-        return getResultFromWrappers();
-    }
+		if(excWrap != null){
+			sentQueryToWrappers(query);
+			return getResultFromWrapper();
+		}
+		return null;
+	}
+	
+	public Object getSingleResult(String query) {
+		// le resultat peut etre soit un nombre d'etudiants (entier), soit une note (double)
+		Object o = wrapper.getSingleResult( query );
+		return o;
+	}
 
     public void sentQueryToWrappers(String query) {
         excWrap.getQueryFromMediator(query);
     }
 
-    public Collection<String> getResultFromWrappers() {
+    public Collection<String> getResultFromWrapper() {
         return excWrap.getQueryResult();
     }
 
@@ -55,10 +59,9 @@ public class Mediator {
 
 	public void readAll() {
 		wrapper.readAll();
-		
 	}
     
-    // Methode commentee car l'objet deja initialisé dans  constructeur
+    // Methode commentee car l'objet deja initialise dans le constructeur
 //    public void initWrappers() {
 //        excWrap = new ExcelWrapper();
 //    }

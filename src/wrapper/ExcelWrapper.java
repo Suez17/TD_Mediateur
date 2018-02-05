@@ -165,4 +165,13 @@ public class ExcelWrapper extends Wrapper{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	@Override
+	public Object getSingleResult(String query) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }

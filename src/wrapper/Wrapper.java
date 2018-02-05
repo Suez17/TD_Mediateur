@@ -5,10 +5,12 @@ package wrapper;
 public abstract class Wrapper {
 
 	
-	// Rappel : Les methodes abstraites DOIVENT etre (re)definis dans 
-	// les classes filles (=> XMLWrapper, ...)
+	/* Rappel : Les methodes abstraites DOIVENT etre (re)definis 
+	 * dans les classes filles (=> XMLWrapper, ...) */
 	public abstract void readAll(); //recupere tout le contenu du fichier source (ideal pour un premier test)
-	
+
+
+	public abstract Object getSingleResult(String query);
 	
 
 }
