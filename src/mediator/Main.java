@@ -10,8 +10,8 @@ public class Main {
 
     	/* Exemple requetes qui marchent sur XML :
     	 * 
-    	 * String globalQuery = "SELECT COUNT(*) FROM Cours WHERE Type != 'Cours Magistral'"
-    	 * String globalQuery = "SELECT COUNT(*) FROM Cours WHERE Type = 'Travaux diriges'"
+    	 * String globalQuery = "SELECT COUNT(*) FROM Cours WHERE Type != 'CM'"
+    	 * String globalQuery = "SELECT COUNT(*) FROM Cours WHERE Type = 'TD'"
     	 * String globalQuery = "SELECT COUNT(*) FROM Etudiants WHERE Provenance != 'France'"
     	 * String globalQuery = "SELECT COUNT(*) FROM Etudiants WHERE Provenance = 'Etats unis'"
     	 * */
