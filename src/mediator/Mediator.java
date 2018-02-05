@@ -25,9 +25,9 @@ public class Mediator {
     public Collection<String> getResultFromWrappers(String query) {
         sendQueryToWrappers(query);
         Collection<String> resultat = new ArrayList<>();
+        resultat.addAll(xmlWrap.getQueryResult());
         resultat.addAll(excWrap.getQueryResult());
         //resultat.addAll(oracleWrap.getQueryResult()); TODO FLORIAN PITEL
-        resultat.addAll(xmlWrap.getQueryResult());
 
         //Si "count" on fait l'addition de tous les nombres récupés à partir des wrappers
         if (query.contains("COUNT")) {

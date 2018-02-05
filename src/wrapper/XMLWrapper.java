@@ -37,18 +37,21 @@ public class XMLWrapper {
 		correspondenceTab = new HashMap<String, String>();
 		correspondenceTab.put("Etudiant", "Etudiant");
 		correspondenceTab.put("Provenance", "Provenance");
+		
+		correspondenceTab.put("Cours", "Cours");
+		correspondenceTab.put("Type", "Type");
+		
 
 		try {
 			URL url = XMLWrapper.class.getResource(sourceFilePath);
-			System.out.println("url : " + url);
+//			System.out.println("url : " + url);
 			
 			File file = new File(url.toURI());
 			FileInputStream fis = new FileInputStream(file);
-			System.out.println("fis : " + fis);
+//			System.out.println("fis : " + fis);
 			
 			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 			doc = builderFactory.newDocumentBuilder().parse(fis);
-			System.out.println("cstrctor - doc : " + doc);
 			
 		} catch (SAXException | IOException | ParserConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -92,46 +95,25 @@ public class XMLWrapper {
 		}
 
 	}
-/*
-	// select count(*)
-	@Override
-	public Object getSingleResult(String query) {
-		Integer nb = 0;
-		String COUNT_QUERY = "SELECT COUNT(*)";
-		String query_type = null;
 
-		System.out.println("query : " + query);
-		query_type = query.substring(0, 15);
-		System.out.println("query_type : " + query_type);
-
-		if (query_type.equalsIgnoreCase(COUNT_QUERY)) {
-			System.out.println("Matchs count_query! ");
-
-			nb = executeCountQuery(query);
-		} else {
-			System.out.println("Doesn't match.");
-		}
-
-		return nb;
-	}
-	*/
+	
+	
 
 	private Integer executeCountQuery(String query) {
 		Integer nb = new Integer( 0 );
 //			Query example : SELECT COUNT(*) FROM STUDENT WHERE COUNTRY != 'FRANCE'
 		String[] splitQuery = query.split(" ");
-        String queryConverted = "", currentQueryElement, charAtEndOfElement;
         
         String section = splitQuery[3];
         String field = splitQuery[5];
         String operation =  splitQuery[6]; // Exemple : "=", "!=", ...
-        String value = splitQuery[7];
-        
-        value = value.split("'")[1]; // Enleve les " ' " de la chaine
         
         
-		if (section.equalsIgnoreCase("STUDENT")) {
-			return countFunction("STUDENT", field, operation, value);
+        String value = query.split("'")[1]; // Enleve les " ' " de la chaine
+        
+        
+		if (section.equalsIgnoreCase("Etudiant") || section.equalsIgnoreCase("Cours") ) {
+			return countFunction(section, field, operation, value);
 
         }else{
         	System.out.println("count function only works on STUDENT table currently.");
@@ -140,38 +122,66 @@ public class XMLWrapper {
 	}
 	
 	
-	public Integer countFunction(String tableName,
+	public Integer countFunction(String xmlSection_name,
 			String field, String operation, String value){
 		
 		Integer count = 0;
 		
-		String xmlElement = correspondenceTab.get( tableName );
+		String xmlElement = correspondenceTab.get( xmlSection_name );
 		String xmlField = correspondenceTab.get( field );
 		
-		System.out.println("countFct - doc : " + doc);
-		System.out.println("xmlElement : " + xmlElement);
+//		System.out.println("tableName : " + xmlSection_name);
+//		System.out.println("xmlElement : " + xmlElement);
 		
-		NodeList etudiants = doc.getElementsByTagName( xmlElement );
+		NodeList elementNodeList = doc.getElementsByTagName( xmlElement ); // Exemple : elementNodeList <==> List d'etudiants <==> element xml 'Etudiants'
+		
 		
 		if ( (operation.equals("!=")) || (operation.equals("<>")) ){
 			
-			for (int index = 0; index < etudiants.getLength(); index++) {
-				// un etudiant
-				Element etu = (Element) etudiants.item(index);
+			for (int index = 0; index < elementNodeList.getLength(); index++) {
+				
+				Element elementItem = (Element) elementNodeList.item(index); // Exemple : elementItm <==> un etudiant
 
-				NodeList provenance_nodeList = etu.getElementsByTagName("Provenance");
+				NodeList field_nodeList = elementItem.getElementsByTagName( xmlField );
 				
-				Element provenance_node = (Element) provenance_nodeList.item(0); // le premier noeud Provenance
-				String provenance_value = provenance_node.getTextContent();
-				System.out.println("Prov value -" + provenance_value + "-");
+				Element field_firstNode = (Element) field_nodeList.item(0);
+				String field_firstValue = field_firstNode.getTextContent();
+//				System.out.println("Prov value -" + provenance_value + "-");
 				
-				System.out.println("value : " + value);
-				if( provenance_value.equals(value) ){
-					System.out.println("count" + count);
+//				System.out.println("value : " + value);
+				if( !(field_firstValue.equals(value)) ){
 					count++;
+					System.out.println("count++... " + count);
 				}
 			}
 			return count;
+		} 
+		
+		else if( operation.equals("=") ){
+			
+			for (int index = 0; index < elementNodeList.getLength(); index++) {
+//				if()
+				
+				Element elementItem = (Element) elementNodeList.item(index); // Exemple : elementItm <==> un etudiant
+
+				NodeList field_nodeList = elementItem.getElementsByTagName( xmlField );
+//				System.out.println("field_nodeList : " + field_nodeList);
+				
+				Element field_firstNode = (Element) field_nodeList.item(0);
+				String field_firstValue = field_firstNode.getTextContent();
+				
+//				System.out.println("field_firstValue : -" + field_firstValue + "-");
+//				System.out.println("value : " + value);
+			
+				if( field_firstValue.equals(value) ){
+					count++;
+					System.out.println("count++... " + count);
+				}
+			}
+			return count;
+			
+		} else {
+			System.out.println("XMLWrapper.countFunction() - Unknown operation. Only '=' and '!=' (or '<>') operation are executed for now...");
 		}
 		
 		return count;
@@ -186,7 +196,7 @@ public class XMLWrapper {
 
 		System.out.println("query : " + query);
 		query_type = query.substring(0, 15);
-		System.out.println("query_type : " + query_type);
+//		System.out.println("query_type : " + query_type);
 
 		if (query_type.equalsIgnoreCase(COUNT_QUERY)) {
 			System.out.println("Matchs count_query! ");
