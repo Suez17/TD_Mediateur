@@ -159,10 +159,4 @@ public class ExcelWrapper {
         excuteQueryInExcel(query);
         return this.result;
     }
-
-
-
-
-	
-	
 }
