@@ -8,10 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 
-public class OracleWrapper extends Wrapper{
+public class OracleWrapper {
     private Connection conn;
+    private String query;
 
     public OracleWrapper() {
         super();
@@ -41,15 +43,14 @@ public class OracleWrapper extends Wrapper{
         }
     }
 
-	@Override
-	public void readAll() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public Object getSingleResult(String query) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+    public Collection<String> getQueryResult() {
+
+        return null;
+    }
+
+    public void getQueryFromMediator(String query) {
+        this.query = query;
+    }
 }

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,17 +23,20 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class XMLWrapper extends Wrapper {
+import static wrapper.ExcelWrapper.query;
+
+public class XMLWrapper {
 	private String sourceFilePath;
 	private static HashMap<String, String> correspondenceTab;
 	private Document doc;
+	private String query;
 
 	public XMLWrapper() {
 		sourceFilePath = "/source-xml.xml";
 		
 		correspondenceTab = new HashMap<String, String>();
-		correspondenceTab.put("STUDENT", "Etudiant");
-		correspondenceTab.put("COUNTRY", "Provenance");
+		correspondenceTab.put("Etudiant", "Etudiant");
+		correspondenceTab.put("Provenance", "Provenance");
 		
 		
 		try {
@@ -56,12 +61,7 @@ public class XMLWrapper extends Wrapper {
 		
 	}
 
-	public void lire_XML(String path_fichier)
-			throws FileNotFoundException, SAXException, IOException, ParserConfigurationException {
 
-	}
-
-	@Override
 	public void readAll() {
 
 		try {
@@ -93,7 +93,7 @@ public class XMLWrapper extends Wrapper {
 		}
 
 	}
-
+/*
 	// select count(*)
 	@Override
 	public Object getSingleResult(String query) {
@@ -115,6 +115,7 @@ public class XMLWrapper extends Wrapper {
 
 		return nb;
 	}
+	*/
 
 	private Integer executeCountQuery(String query) {
 		Integer nb = new Integer( 0 );
@@ -155,7 +156,7 @@ public class XMLWrapper extends Wrapper {
 		
 		
 		
-		if ( operation.equals("!=") ){
+		if ( (operation.equals("!=")) || (operation.equals("<>")) ){
 			
 			for (int index = 0; index < etudiants.getLength(); index++) {
 				// un etudiant
@@ -179,4 +180,30 @@ public class XMLWrapper extends Wrapper {
 		return count;
 	}
 
+	public Collection<String> getQueryResult() {
+		Collection<String> resultat  = new ArrayList();
+
+		Integer nb = 0;
+		String COUNT_QUERY = "SELECT COUNT(*)";
+		String query_type = null;
+
+		System.out.println("query : " + query);
+		query_type = query.substring(0, 15);
+		System.out.println("query_type : " + query_type);
+
+		if (query_type.equalsIgnoreCase(COUNT_QUERY)) {
+			System.out.println("Matchs count_query! ");
+
+			nb = executeCountQuery(query);
+		} else {
+			System.out.println("Doesn't match.");
+		}
+
+		resultat.add( nb.toString() );
+		return resultat;
+	}
+
+	public void getQueryFromMediator(String query) {
+		this.query = query;
+	}
 }

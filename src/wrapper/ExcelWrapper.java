@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class ExcelWrapper extends Wrapper{
+public class ExcelWrapper {
     public static Connection conn;
     public static HashMap<String, String> correspondenceTab;
     public static String query;
@@ -142,9 +142,10 @@ public class ExcelWrapper extends Wrapper{
                 getResult = "";
                 //resultQuery.getMetaData().getColumnCount() permet de récupèrer le nombre de colonnes retournées par ResultSet
                 for (int i = 1; i <= resultQuery.getMetaData().getColumnCount(); i++) {
-                    getResult += " : " + resultQuery.getString(i) + " // ";
+                    //getResult += " : " + resultQuery.getString(i) + " // ";
+                    getResult += resultQuery.getString(i);
                 }
-                result.add(getResult + "\n");
+                result.add(getResult + " ");
             }
             resultQuery.close();
         } catch (SQLException e) {
@@ -159,19 +160,9 @@ public class ExcelWrapper extends Wrapper{
         return this.result;
     }
 
-    
-	@Override
-	public void readAll() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
-	@Override
-	public Object getSingleResult(String query) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	
 	
 }

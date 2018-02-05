@@ -1,6 +1,8 @@
 package mediator;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -21,12 +23,12 @@ public class Main {
         /******************************************************/
     	System.out.println("Hello XML SECTION!");
     	
-    	Mediator mediator = new Mediator( WrapperType.XML );
-    	String globalQuery = "SELECT COUNT(*) FROM STUDENT WHERE COUNTRY != 'France'";
+    	Mediator mediator = new Mediator( );
+    	String globalQuery = "SELECT COUNT(*) FROM Etudiant WHERE Provenance <> 'France'";
 //    	mediator.readAll();
-    	int nb = (Integer) mediator.getSingleResult( globalQuery );
+    	ArrayList<String> result = (ArrayList) mediator.getResultFromWrappers( globalQuery );
     	
-    	System.out.println("nb : " + nb);
+    	System.out.println("Main - result : " + result);
     	
         
     	
