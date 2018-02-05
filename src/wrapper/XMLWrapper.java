@@ -45,6 +45,7 @@ public class XMLWrapper {
 		correspondenceTab.put("CM", "Cours Magistral");
 		
 		
+		
 
 		try {
 			URL url = XMLWrapper.class.getResource(sourceFilePath);
