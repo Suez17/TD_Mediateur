@@ -127,7 +127,7 @@ public class OracleWrapper {
     }
 
     //Exécuter la requête convertie dans Mysql
-    public void excuteQueryInExcel(String query) {
+    public void excuteQueryInOracle(String query) {
         this.connexion();
 
         String finalQuery = "";
@@ -162,7 +162,7 @@ public class OracleWrapper {
 
     //Récupérer le résultat de la requête et l'envoyer au médiateur
     public Collection<String> getQueryResult() {
-        excuteQueryInExcel(query);
+        excuteQueryInOracle(query);
         return this.result;
     }
 
