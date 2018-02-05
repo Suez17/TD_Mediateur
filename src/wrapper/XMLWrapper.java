@@ -40,6 +40,10 @@ public class XMLWrapper {
 		
 		correspondenceTab.put("Cours", "Cours");
 		correspondenceTab.put("Type", "Type");
+		correspondenceTab.put("TD", "Travaux diriges");
+		correspondenceTab.put("TP", "Travaux pratiques");
+		correspondenceTab.put("CM", "Cours Magistral");
+		
 		
 
 		try {
@@ -129,6 +133,11 @@ public class XMLWrapper {
 		
 		String xmlElement = correspondenceTab.get( xmlSection_name );
 		String xmlField = correspondenceTab.get( field );
+		String xmlValue = correspondenceTab.get( value );
+		if(xmlValue != null){
+			value = xmlValue;
+		}
+		
 		
 //		System.out.println("tableName : " + xmlSection_name);
 //		System.out.println("xmlElement : " + xmlElement);

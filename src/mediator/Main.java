@@ -17,7 +17,7 @@ public class Main {
     	 * */
     	
     	Mediator mediator = new Mediator( );
-    	String globalQuery = "SELECT COUNT(*) FROM Cours WHERE Type = 'Travaux diriges'";
+    	String globalQuery = "SELECT COUNT(*) FROM Cours WHERE Type = 'TD'";
     	ArrayList<String> result = (ArrayList) mediator.getResultFromWrappers( globalQuery );
     	
     	System.out.println("Main - result : " + result);
