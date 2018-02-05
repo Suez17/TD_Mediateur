@@ -46,7 +46,6 @@ public class OracleWrapper {
 
 
     public Collection<String> getQueryResult() {
-
         return null;
     }
 

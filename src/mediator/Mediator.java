@@ -6,6 +6,8 @@ import wrapper.ExcelWrapper;
 import wrapper.OracleWrapper;
 import wrapper.XMLWrapper;
 
+import static com.sun.jmx.snmp.ThreadContext.contains;
+
 /**
  * Created by mikouyou on 21/11/2017.
  */
@@ -26,18 +28,24 @@ public class Mediator {
         resultat.addAll(excWrap.getQueryResult());
         //resultat.addAll(oracleWrap.getQueryResult());
         resultat.addAll(xmlWrap.getQueryResult());
+
+        if (query.contains("COUNT")) {
+            int count = 0;
+            for (String number : resultat) {
+                count += Integer.parseInt(number);
+            }
+            Collection<String> countResultat = new ArrayList<>();
+            countResultat.add("COUNT = " + count);
+            return countResultat;
+        }
         return resultat;
 	}
-
 
     public void sendQueryToWrappers(String query) {
 		oracleWrap.getQueryFromMediator(query);
     	excWrap.getQueryFromMediator(query);
     	xmlWrap.getQueryFromMediator(query);
     }
-
-
-
 
 /*
 	public void readAll() {

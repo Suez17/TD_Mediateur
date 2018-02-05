@@ -140,12 +140,16 @@ public class ExcelWrapper {
             String getResult;
             while (resultQuery.next()) {
                 getResult = "";
+
                 //resultQuery.getMetaData().getColumnCount() permet de récupèrer le nombre de colonnes retournées par ResultSet
                 for (int i = 1; i <= resultQuery.getMetaData().getColumnCount(); i++) {
-                    //getResult += " : " + resultQuery.getString(i) + " // ";
-                    getResult += resultQuery.getString(i);
+                    if (!query.contains("COUNT")) {
+                        getResult += " : " + resultQuery.getString(i) + " // \n";
+                    } else {
+                        getResult = resultQuery.getString(i);
+                    }
                 }
-                result.add(getResult + " ");
+                result.add(getResult);
             }
             resultQuery.close();
         } catch (SQLException e) {

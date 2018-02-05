@@ -37,8 +37,7 @@ public class XMLWrapper {
 		correspondenceTab = new HashMap<String, String>();
 		correspondenceTab.put("Etudiant", "Etudiant");
 		correspondenceTab.put("Provenance", "Provenance");
-		
-		
+
 		try {
 			URL url = XMLWrapper.class.getResource(sourceFilePath);
 			System.out.println("url : " + url);
@@ -153,8 +152,6 @@ public class XMLWrapper {
 		System.out.println("xmlElement : " + xmlElement);
 		
 		NodeList etudiants = doc.getElementsByTagName( xmlElement );
-		
-		
 		
 		if ( (operation.equals("!=")) || (operation.equals("<>")) ){
 			
